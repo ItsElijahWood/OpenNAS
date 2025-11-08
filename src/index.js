@@ -3,13 +3,13 @@ import cors from "cors";
 import { database } from "./database.js";
 import dotenv from "dotenv";
 import { router } from "./router.js";
-
-dotenv.config();
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:3000",

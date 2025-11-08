@@ -12,9 +12,9 @@ dotenv.config({ quiet: true });
 export async function login(req, res) {
   const { username, password } = req.body;
 
-  const user_username = getEnv(res, "USERNAME");
-  const user_password = getEnv(res, "PASSWORD");
-  const display_name = getEnv(res, "DISPLAY_NAME");
+  const user_username = getEnv(res, "NAS_USERNAME");
+  const user_password = getEnv(res, "NAS_PASSWORD");
+  const display_name = getEnv(res, "NAS_DISPLAY_NAME");
 
   const JWT_TOKEN = getEnv(res, "JWT_TOKEN");
 
@@ -34,7 +34,7 @@ export async function login(req, res) {
     { expiresIn: "10d" }
   );
 
-  res.cookie(token, "token", {
+  res.cookie("token", token, {
     secure: false,
     httpOnly: true,
     path: "/",
