@@ -22,3 +22,16 @@ html {
   border: 2px solid rgba(226, 114, 91, 0.6);
   background-color: #4b3636;
 }
+.global-component-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+}
+.global-component-header-titlediv {
+  margin-left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  cursor: pointer;
+}

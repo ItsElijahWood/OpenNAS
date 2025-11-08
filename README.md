@@ -1,2 +1,9 @@
-# An open-source Network Attached Storage software
-This project is currently in early development, more information will be released here in more versions.
+# Open-Source Network Attached Storage (NAS) Software
+
+This project is currently in early development. More information will be released in future versions.
+
+---
+
+### Note
+**Supported:** Arch Linux  
+**Upcoming Support:** Debian Linux, Windows
