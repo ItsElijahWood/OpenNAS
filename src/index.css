@@ -1,0 +1,24 @@
+body,
+html {
+  background-color: #282120fa;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* Global components */
+.global-component-button {
+  background-color: #3a2c2c;
+  padding: 15px;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  border-radius: 0.75rem;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+.global-component-button:hover {
+  box-shadow: 0 0 8px rgba(226, 114, 91, 0.6);
+  border: 2px solid rgba(226, 114, 91, 0.6);
+  background-color: #4b3636;
+}
