@@ -1,22 +1,24 @@
 .nas-div {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 10px;
+  gap: 2rem;
   justify-items: center;
-  height: 100%;
-  margin-top: 6rem;
+  align-items: start;
+  width: 50%;
+  margin: 6rem auto;
+  position: relative;
+  top: 0;
+  left: 0;
+  transform: none;
+  justify-content: center;
 }
 
 /** Storage Pie Chart Component **/
 .component-nas-storage-pie-chart {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  position: relative;
+  gap: 0.5rem;
   width: 300px !important;
   background: rgba(78, 62, 60, 0.98);
   padding: 1rem;
@@ -34,4 +36,133 @@
   margin: 10px;
   font-size: 20px;
   user-select: none;
+}
+.component-nas-storage-pie-chart-p {
+  color: #ffffff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: absolute;
+  bottom: 5px;
+  justify-content: center;
+  margin: 10px;
+  user-select: none;
+}
+
+/** CPU Gauge Chat **/
+.component-nas-cpu-gauge-chart {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 3.5rem;
+  width: 300px !important;
+  background: rgba(78, 62, 60, 0.98);
+  padding: 1rem;
+  border: 3px solid #7a5c5c;
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+  height: 340px;
+}
+.component-nas-cpu-gauge-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+  color: #ffffff;
+  margin: 10px;
+  font-size: 20px;
+  user-select: none;
+}
+.component-nas-cpu-gauge-chart-p {
+  color: #ffffff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+  margin: 10px;
+  user-select: none;
+}
+.component-nas-cpu-gauge-chart-info {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* System Information Component */
+.component-nas-system-info {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 3rem;
+  background: rgba(78, 62, 60, 0.98);
+  padding: 1rem;
+  border: 3px solid #7a5c5c;
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+  height: 350px;
+}
+.component-nas-system-info-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #ffffff;
+  margin: 10px;
+  font-size: 23px;
+  user-select: none;
+}
+.component-nas-system-info-p {
+  color: #ffffff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 10px;
+  user-select: none;
+}
+.component-nas-system-info-container {
+  display: flex;
+  justify-content: space-between;
+}
+.component-nas-system-info-container-adv {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  justify-content: center;
+  height: 405px;
+}
+.component-nas-system-info-container-adv-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.component-nas-system-info-container-sysinfo {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 300px;
+  height: 325px;
+}
+.component-nas-system-info-container-sysinfo-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (max-width: 480px) {
+  .nas-div {
+    margin-top: 2rem !important;
+  }
+  .component-nas-system-info-container-adv {
+    display: none !important;
+  }
+  .component-nas-system-info-container-sysinfo-inner {
+    gap: 10px !important;
+  }
 }
