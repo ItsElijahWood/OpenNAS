@@ -36,6 +36,12 @@ body {
   cursor: pointer;
 }
 
+@media (max-width: 1880px) {
+  .global-component-header-titlediv {
+    margin-left: 15vw !important;
+  }
+}
+
 @media (max-width: 480px) {
   .global-component-header-titlediv {
     margin-left: 1rem !important;

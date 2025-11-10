@@ -155,9 +155,31 @@
   gap: 20px;
 }
 
+@media (max-width: 1880px) {
+  .nas-div {
+    width: 80% !important;
+  }
+  .component-nas-system-info {
+    margin-right: 4rem !important;
+  }
+  .component-nas-cpu-gauge-chart {
+    margin-left: 4rem !important;
+  }
+  .component-nas-storage-pie-chart-p {
+    margin: 10px !important;
+  }
+}
+
 @media (max-width: 480px) {
   .nas-div {
     margin-top: 2rem !important;
+    width: 50% !important;
+  }
+  .component-nas-cpu-gauge-chart {
+    margin-left: 0 !important;
+  }
+  .component-nas-system-info {
+    margin-right: 0 !important;
   }
   .component-nas-system-info-container-adv {
     display: none !important;
