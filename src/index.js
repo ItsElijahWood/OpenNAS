@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
-import { database } from "./database.js";
 import dotenv from "dotenv";
 import { router } from "./router.js";
 import cookieParser from "cookie-parser";
+import { db } from "./database.js";
+
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -17,9 +19,9 @@ app.use(
   })
 );
 
-database();
+const conn = await db();
 router(app);
 
 app.listen(PORT, () => {
-  console.log(`Server started on port: ${PORT}.`);
+  console.log(`Server running on port: ${PORT}.`);
 });

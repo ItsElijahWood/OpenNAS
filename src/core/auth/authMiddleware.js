@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 dotenv.config({ quiet: true });
 
 /**
- * 
- * @param {express.Request} req 
- * @param {express.Response} res 
+ *
+ * @param {express.Request} req
+ * @param {express.Response} res
  * @param {express.NextFunction} next
  */
 export function authMiddleware(req, res, next) {
@@ -23,7 +23,6 @@ export function authMiddleware(req, res, next) {
 
     next();
   } catch (e) {
-    console.error(e);
     return res.status(401).json({ error: "Unathorised access." });
   }
 }

@@ -49,7 +49,6 @@ function getEnv(res, name) {
   if (value) {
     return value;
   } else {
-    console.error("ENV is null or empty value.");
     return res.status(500).json({ error: "ENV is null or empty value." });
   }
 }
