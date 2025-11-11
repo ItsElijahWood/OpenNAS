@@ -25,6 +25,10 @@ export async function getNASResources(req, res) {
   const drives = await si.fsSize();
   const specific_drive = drives.find((d) => d.fs === NAS_DRIVE);
 
+  if (!specific_drive) {
+    return res.status(500).json({ error: "Internal server error." });
+  }
+
   const cpu_percentage = await getCpuUsage();
 
   const info = {
@@ -32,6 +36,7 @@ export async function getNASResources(req, res) {
       size: specific_drive.size || "",
       used: specific_drive.used || "",
       available: specific_drive.available || "",
+      drive: NAS_DRIVE,
     },
     cpu: {
       usage: cpu_percentage,
