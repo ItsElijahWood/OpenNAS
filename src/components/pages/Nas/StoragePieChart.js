@@ -42,6 +42,7 @@ function formatBytes(bytes, decimals = 1) {
 function StoragePieChart() {
   const [disk, setDisk] = useState([]);
   const [diskTotal, setDiskTotal] = useState("");
+  const [nasDisk, setNasDisk] = useState("");
   const PIE_CHART_COLORS = ["#e2725b", "#00C49F"];
 
   useEffect(() => {
@@ -58,7 +59,9 @@ function StoragePieChart() {
         const drive_total = data.drive.size;
         const drive_free = data.drive.available;
         const drive_used = data.drive.used;
+        const drive = data.drive.drive;
 
+        setNasDisk(drive);
         setDiskTotal(formatBytes(drive_total));
         setDisk([
           { name: "Used", value: drive_used },
@@ -78,7 +81,11 @@ function StoragePieChart() {
       <p className="component-nas-storage-pie-chart-title">
         Storage <b style={{ color: "#fd7f66ff" }}>Used</b>
       </p>
-      <PieChart style={{ userSelect: "none" }} width={300} height={250}>
+      <PieChart
+        style={{ userSelect: "none" }}
+        className="component-nas-storage-piechart-constructor"
+        width={350}
+        height={250}>
         <Pie
           data={disk}
           cx="50%"
@@ -92,9 +99,14 @@ function StoragePieChart() {
           ))}
         </Pie>
       </PieChart>
-      <p className="component-nas-storage-pie-chart-p">
-        Total: <b style={{ color: "#fd7f66ff" }}>{diskTotal}</b>
-      </p>
+      <div className="component-nas-storage-pie-chart-div-p">
+        <p className="component-nas-storage-pie-chart-p">
+          Total: <b style={{ color: "#fd7f66ff" }}>{diskTotal}</b>
+        </p>
+        <p className="component-nas-storage-pie-chart-p">
+          Disk: <b style={{ color: "#fd7f66ff" }}>{nasDisk}</b>
+        </p>
+      </div>
     </div>
   );
 }

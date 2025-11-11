@@ -19,7 +19,7 @@
   flex-direction: column;
   position: relative;
   gap: 0.5rem;
-  width: 300px !important;
+  width: 350px !important;
   background: rgba(78, 62, 60, 0.98);
   padding: 1rem;
   border: 3px solid #7a5c5c;
@@ -37,15 +37,18 @@
   font-size: 20px;
   user-select: none;
 }
+.component-nas-storage-pie-chart-div-p {
+  position: absolute;
+  bottom: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .component-nas-storage-pie-chart-p {
   color: #ffffff;
   font-size: 18px;
   display: flex;
-  align-items: center;
   gap: 0.4rem;
-  position: absolute;
-  bottom: 5px;
-  justify-content: center;
   margin: 10px;
   user-select: none;
 }
@@ -55,7 +58,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 3.5rem;
+  gap: 2.5rem;
   width: 300px !important;
   background: rgba(78, 62, 60, 0.98);
   padding: 1rem;
@@ -90,6 +93,7 @@
   bottom: 10px;
   align-items: center;
   justify-content: space-between;
+  width: 90%;
 }
 
 /* System Information Component */
@@ -172,8 +176,12 @@
 
 @media (max-width: 480px) {
   .nas-div {
-    margin-top: 2rem !important;
+    margin-top: 6rem !important;
     width: 50% !important;
+  }
+  .component-nas-storage-pie-chart {
+    height: 380px !important;
+    width: 300px !important;
   }
   .component-nas-cpu-gauge-chart {
     margin-left: 0 !important;
@@ -186,5 +194,13 @@
   }
   .component-nas-system-info-container-sysinfo-inner {
     gap: 10px !important;
+  }
+  .component-nas-storage-pie-chart-div-p {
+    align-items: start !important;
+    flex-direction: column;
+  }
+  .component-nas-storage-piechart-constructor {
+    width: 300px !important;
+    height: 250px !important;
   }
 }

@@ -4,6 +4,7 @@ import "../styles/css/Nas.css";
 import HeaderComponent from "../components/global/Header";
 import CPUUsage from "../components/pages/Nas/CPUUsage";
 import SystemInformation from "../components/pages/Nas/SystemInformation";
+import Loader from "../components/global/Loader";
 
 function Nas() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function Nas() {
   return (
     <>
       <HeaderComponent />
+      <Loader />
       <div className="nas-div">
         <SystemInformation />
         <CPUUsage />
