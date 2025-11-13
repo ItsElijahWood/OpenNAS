@@ -67,6 +67,10 @@ function StoragePieChart() {
           { name: "Used", value: drive_used },
           { name: "Free", value: drive_free },
         ]);
+      } else {
+        const data = await response.json();
+
+        alert(data.error);
       }
     }
 

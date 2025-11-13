@@ -18,7 +18,6 @@ function HeaderComponent() {
         !buttonRef.current.contains(e.target)
       ) {
         setMenuOpen(false);
-        console.log(e.target);
       }
     };
 

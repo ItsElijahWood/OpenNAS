@@ -4,7 +4,8 @@
   gap: 2rem;
   justify-items: center;
   align-items: start;
-  width: 50%;
+  width: 100%;
+  max-width: 1200px;
   margin: 6rem auto;
   position: relative;
   top: 0;
@@ -25,7 +26,7 @@
   border: 3px solid #7a5c5c;
   border-radius: 1rem;
   backdrop-filter: blur(8px);
-  height: 340px;
+  height: 350px;
 }
 .component-nas-storage-pie-chart-title {
   display: flex;
@@ -65,7 +66,8 @@
   border: 3px solid #7a5c5c;
   border-radius: 1rem;
   backdrop-filter: blur(8px);
-  height: 340px;
+  height: 350px;
+  margin-left: 3rem;
 }
 .component-nas-cpu-gauge-chart-title {
   display: flex;
@@ -108,6 +110,7 @@
   border-radius: 1rem;
   backdrop-filter: blur(8px);
   height: 350px;
+  width: 450px;
 }
 .component-nas-system-info-title {
   display: flex;
@@ -159,15 +162,104 @@
   gap: 20px;
 }
 
+/* Memory Pie Chart */
+.component-nas-memory-pie-chart-outer {
+  display: flex;
+  flex-direction: column;
+  background: rgba(78, 62, 60, 0.98);
+  height: 320px;
+  padding: 20px;
+  border: 2px solid #7a5c5c;
+  border-radius: 1rem;
+  align-items: center;
+  width: 440px;
+}
+.component-nas-memory-pie-chart-title {
+  color: #ffffff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+.component-nas-memory-pie-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+}
+.component-nas-memory-pie-chart-info {
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-width: 220px;
+  text-align: center;
+}
+.component-nas-memory-pie-chart-info-total {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  margin: 0;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.component-nas-memory-pie-chart-info-p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  user-select: none;
+}
+.component-nas-memory-pie-chart-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.component-nas-memory-pie-chart-dot.used {
+  background-color: #0088fe;
+}
+.component-nas-memory-pie-chart-dot.free {
+  background-color: #00c49f;
+}
+.component-nas-memory-pie-chart-info-p-inner {
+  font-size: 18px;
+  color: #e8e8e8;
+  border-radius: 0.75rem;
+  padding: 4px 8px;
+  user-select: none;
+  width: fit-content;
+  margin: 0;
+}
+
+/* Network Line Chart */
+.component-nas-network-line-chart {
+  display: flex;
+  flex-direction: column;
+  background: rgba(78, 62, 60, 0.98);
+  height: 320px;
+  padding: 20px;
+  border: 2px solid #7a5c5c;
+  border-radius: 1rem;
+  align-items: center;
+  width: 700px;
+  margin-left: 29rem;
+}
+.component-nas-network-line-chart-title {
+  color: #ffffff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+.component-nas-network-line-chart-inner {
+  display: flex;
+}
+
 @media (max-width: 1880px) {
   .nas-div {
     width: 80% !important;
-  }
-  .component-nas-system-info {
-    margin-right: 4rem !important;
-  }
-  .component-nas-cpu-gauge-chart {
-    margin-left: 4rem !important;
   }
   .component-nas-storage-pie-chart-p {
     margin: 10px !important;
@@ -188,6 +280,7 @@
   }
   .component-nas-system-info {
     margin-right: 0 !important;
+    width: 300px !important;
   }
   .component-nas-system-info-container-adv {
     display: none !important;
@@ -202,5 +295,24 @@
   .component-nas-storage-piechart-constructor {
     width: 300px !important;
     height: 250px !important;
+  }
+  .component-nas-memory-pie-chart-outer {
+    width: 300px !important;
+    height: 550px !important;
+  }
+  .component-nas-memory-pie-chart {
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .VictoryContainer {
+    width: 70% !important;
+  }
+  .component-nas-network-line-chart {
+    margin-left: 0 !important;
+    width: 300px !important;
+  }
+  .component-nas-network-line-chart-inner {
+    width: 550px !important;
+    justify-content: center;
   }
 }

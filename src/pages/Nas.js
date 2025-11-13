@@ -5,6 +5,8 @@ import HeaderComponent from "../components/global/Header";
 import CPUUsage from "../components/pages/Nas/CPUUsage";
 import SystemInformation from "../components/pages/Nas/SystemInformation";
 import Loader from "../components/global/Loader";
+import MemoryUsage from "../components/pages/Nas/MemoryUsage";
+import NetworkUsage from "../components/pages/Nas/NetworkUsage";
 
 function Nas() {
   useEffect(() => {
@@ -30,6 +32,8 @@ function Nas() {
         <SystemInformation />
         <CPUUsage />
         <StoragePieChart />
+        <MemoryUsage />
+        <NetworkUsage />
       </div>
     </>
   );

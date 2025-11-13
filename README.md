@@ -7,7 +7,8 @@ This project is currently in early development. More information will be release
 ### Note
 
 **Supported:** Arch Linux<br>
-**Upcoming Support:** Debian Linux, Windows
+**Upcoming Support:** Debian Linux<br>
+**Possible Unsupported** Windows
 
 ### Screen responsiveness
 

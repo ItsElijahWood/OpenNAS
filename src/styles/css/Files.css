@@ -1,0 +1,166 @@
+.files-centre {
+  display: flex;
+  width: 100%;
+  height: 70vh;
+  justify-content: center;
+  margin-top: 10rem;
+}
+
+/* Files container component */
+.component-files-filescontainer {
+  position: relative;
+  display: flex;
+  height: 70vh;
+  width: 70pc;
+  display: flex;
+  gap: 2rem;
+}
+.component-files-filescontainer-inner {
+  border: 2px solid rgb(226, 114, 91);
+  height: 70vh;
+  width: 90%;
+  border-radius: 10px;
+  background-color: rgba(78, 62, 60, 0.98);
+  overflow: auto;
+}
+.component-files-filescontainer-inner::-webkit-scrollbar {
+  background-color: transparent;
+}
+.component-files-filescontainer-inner::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  cursor: grab;
+}
+.component-files-filescontainer-inner-div {
+  border: 2px solid #392926fa;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  position: relative;
+}
+.component-files-filescontainer-inner-div-p-directory {
+  color: #ffffff;
+  user-select: none;
+  cursor: pointer;
+}
+.component-files-filescontainer-inner-div-p-file {
+  color: #ffffff;
+  user-select: none;
+}
+.component-files-filescontainer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.component-files-filescontainer-info-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 2px solid rgb(226, 114, 91);
+  background-color: rgba(78, 62, 60, 0.98);
+  padding: 25px;
+  width: 200px;
+  height: 70px;
+  border-radius: 10px;
+}
+.component-files-filescontainer-info-div-title {
+  color: #ffffff;
+  font-size: 17px;
+  user-select: none;
+}
+.component-files-filescontainer-info-div-p {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: bold;
+  user-select: none;
+}
+.component-files-filescontainer-inner-div-menu {
+  display: none;
+  position: absolute;
+  right: 20px;
+  bottom: -170px;
+  height: 150px;
+  width: 175px;
+  background-color: rgba(78, 62, 60, 0.98);
+  border: 2px solid rgb(226, 114, 91);
+  border-radius: 10px;
+  padding: 15px;
+  z-index: 1;
+}
+.component-files-filescontainer-inner-div-menu.visible {
+  display: flex;
+}
+.component-files-filescontainer-inner-div-menu-div {
+  width: 100%;
+}
+.component-files-filescontainer-inner-div-menu-div-button {
+  background: #392926fa;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
+  user-select: none;
+}
+.component-files-delete-confirmation {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border: 2px solid rgb(226, 114, 91);
+  background-color: rgba(78, 62, 60, 0.98);
+  width: 100%;
+  height: 100%;
+}
+.component-files-delete-confirmation.visible {
+  display: flex;
+}
+.component-files-delete-confirmation-inner {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+}
+.component-files-delete-confirmation-inner-buttons-div {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .files-centre {
+    margin-top: 6rem !important;
+    height: 85vh;
+  }
+  .component-files-filescontainer {
+    flex-direction: column !important;
+    margin-left: 1.3rem !important;
+    height: 85vh;
+  }
+  .component-files-filescontainer-info {
+    margin-top: 27rem !important;
+  }
+  .component-files-filescontainer-info-div {
+    width: 320px !important;
+  }
+  .component-files-filescontainer-inner {
+    height: 400px !important;
+    position: fixed !important;
+  }
+  .component-files-filescontainer-info {
+    overflow: auto;
+    height: 400px !important;
+  }
+  .component-files-delete-confirmation {
+    left: 47%;
+  }
+}
