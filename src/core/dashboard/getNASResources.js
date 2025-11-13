@@ -26,7 +26,16 @@ export async function getNASResources(req, res) {
   const specific_drive = drives.find((d) => d.fs === NAS_DRIVE);
 
   if (!specific_drive) {
-    return res.status(500).json({ error: "Internal server error." });
+    let drive_names = [];
+    for (const drive of drives) {
+      drive_names.push(drive.fs);
+    }
+
+    const arr_drives = drive_names.join(", ");
+
+    return res.status(500).json({
+      error: `The NAS_DRIVE "${NAS_DRIVE}" has not matched to a drive on your device. Avaliable drives: ${arr_drives}`,
+    });
   }
 
   const cpu_percentage = await getCpuUsage();

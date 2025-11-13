@@ -3,6 +3,7 @@ import { login } from "./core/auth/login.js";
 import { authMiddleware } from "./core/auth/authMiddleware.js";
 import { getNASResources } from "./core/dashboard/getNASResources.js";
 import { getSystemInformation } from "./core/dashboard/getSystemInformation.js";
+import { getNASFiles } from "./core/files/getNASFiles.js";
 
 /**
  *
@@ -27,5 +28,13 @@ export function router(app) {
   });
   app.get("/dashboard/get-system-information", (req, res) => {
     getSystemInformation(req, res);
+  });
+
+  // Files
+  app.get("/files/get-nas-drive-env", (req, res) => {
+    getNASDriveEnv(req, res);
+  });
+  app.post("/files/get-nas-files", (req, res) => {
+    getNASFiles(req, res);
   });
 }
