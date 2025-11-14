@@ -4,6 +4,8 @@ import { authMiddleware } from "./core/auth/authMiddleware.js";
 import { getNASResources } from "./core/dashboard/getNASResources.js";
 import { getSystemInformation } from "./core/dashboard/getSystemInformation.js";
 import { getNASFiles } from "./core/files/getNASFiles.js";
+import { deleteDirectory } from "./core/files/deleteDirectory.js";
+import { renameDirectory } from "./core/files/renameDirectory.js";
 
 /**
  *
@@ -36,5 +38,11 @@ export function router(app) {
   });
   app.post("/files/get-nas-files", (req, res) => {
     getNASFiles(req, res);
+  });
+  app.post("/files/delete-directory", (req, res) => {
+    deleteDirectory(req, res);
+  });
+  app.post("/files/rename-directory", (req, res) => {
+    renameDirectory(req, res);
   });
 }
