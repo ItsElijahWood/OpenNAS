@@ -45,6 +45,10 @@
   user-select: none;
   cursor: pointer;
 }
+.component-files-filescontainer-inner-div-p-directory:hover {
+  color: rgb(226, 114, 91);
+  text-decoration: underline;
+}
 .component-files-filescontainer-inner-div-p-file {
   color: #ffffff;
   user-select: none;
@@ -94,6 +98,9 @@
 }
 .component-files-filescontainer-inner-div-menu-div {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 .component-files-filescontainer-inner-div-menu-div-button {
   background: #392926fa;
@@ -132,8 +139,58 @@
 }
 .component-files-delete-confirmation-inner-buttons-div {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   width: 100%;
+}
+.component-files-rename {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border: 2px solid rgb(226, 114, 91);
+  background-color: rgba(78, 62, 60, 0.98);
+  width: 100%;
+  height: 100%;
+}
+.component-files-rename.visible {
+  display: flex;
+}
+.component-files-rename-inner {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+}
+.component-files-rename-inner-buttons-div {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 10px;
+}
+.component-files-rename-inner-buttons-div-input {
+  padding: 12px 16px;
+  border: 1px solid rgb(226, 114, 91);
+  background-color: #392926fa;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s ease-in-out;
+}
+.component-files-rename-inner-buttons-div-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.component-files-rename-inner-buttons-div-input:focus {
+  border-color: rgb(255, 141, 118);
+  box-shadow: 0 0 6px rgba(226, 114, 91, 0.5);
+  background-color: #44312dfa;
 }
 
 @media (max-width: 480px) {
@@ -161,6 +218,9 @@
     height: 400px !important;
   }
   .component-files-delete-confirmation {
+    left: 47%;
+  }
+  .component-files-rename {
     left: 47%;
   }
 }

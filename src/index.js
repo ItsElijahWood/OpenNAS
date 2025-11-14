@@ -4,6 +4,7 @@ import "./index.css";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Nas from "./pages/Nas";
 import Files from "./pages/Files";
+import FourZeroFour from "./pages/404";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,6 +13,7 @@ root.render(
       <Route path="/" element={<App />}></Route>
       <Route path="/nas" element={<Nas />}></Route>
       <Route path="/nas/files" element={<Files />}></Route>
+      <Route path="*" element={<FourZeroFour />}></Route>
     </Routes>
   </BrowserRouter>
 );

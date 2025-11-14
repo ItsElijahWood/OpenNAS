@@ -82,6 +82,7 @@ function MemoryUsage() {
           innerRadius={240}
           width={500}
           height={500}
+          colorScale={["#027a64ff", "#00c49f"]}
         />
       </div>
     </div>

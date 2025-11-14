@@ -217,7 +217,7 @@
   border-radius: 50%;
 }
 .component-nas-memory-pie-chart-dot.used {
-  background-color: #0088fe;
+  background-color: #027a64ff;
 }
 .component-nas-memory-pie-chart-dot.free {
   background-color: #00c49f;

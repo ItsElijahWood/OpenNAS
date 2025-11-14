@@ -1,6 +1,6 @@
 {
-  "short_name": "NASS",
-  "name": "Network Attached Storage Software",
+  "short_name": "OpenNAS",
+  "name": "OpenSource Network Attached Storage",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,5 +11,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#282120fa"
 }

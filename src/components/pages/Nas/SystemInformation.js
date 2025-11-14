@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import opennas_logo from "../../../styles/imgs/OpenNASS.png";
+import opennas_logo from "../../../styles/imgs/OpenNAS.png";
 
 function SystemInformation() {
   const [hostname, setHostName] = useState("");

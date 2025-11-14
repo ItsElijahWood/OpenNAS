@@ -58,8 +58,8 @@ function NetworkUsage() {
               border: { stroke: "none" },
             }}
             data={[
-              { name: "Inbound", symbol: { fill: "#00b4d8" } },
-              { name: "Outbound", symbol: { fill: "#fd7f66" } },
+              { name: "Inbound (kbps)", symbol: { fill: "#00b4d8" } },
+              { name: "Outbound (kbps)", symbol: { fill: "#fd7f66" } },
             ]}
           />
           <VictoryAxis

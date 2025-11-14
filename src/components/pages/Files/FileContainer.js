@@ -26,6 +26,7 @@ function FileContainer() {
   const [inBound, setInBound] = useState("");
   const [outBound, setOutBound] = useState("");
   const [confirmationFile, setConfirmationFile] = useState([]);
+  const [renamingFile, setRenamingFile] = useState([]);
 
   useEffect(() => {
     let intervalId;
@@ -187,13 +188,77 @@ function FileContainer() {
     }
   }
 
-  function openDeleteConfirmationMenu(name, isDirectory) {
+  function openDeleteConfirmationMenu(name, isDirectory, dirPath, idx) {
     const confirmMenu = document.getElementById(
       "component-files-delete-confirmation"
     );
 
-    setConfirmationFile([name, isDirectory]);
+    setConfirmationFile([name, isDirectory, dirPath, idx]);
     confirmMenu.classList.toggle("visible");
+  }
+
+  function openRenamingMenu(name, isDirectory, dirPath, idx) {
+    const renameMenu = document.getElementById("component-files-rename");
+
+    setRenamingFile([name, isDirectory, dirPath, idx]);
+    renameMenu.classList.toggle("visible");
+  }
+
+  async function deleteDirectory() {
+    const name = confirmationFile[0];
+    const dirPath = confirmationFile[2];
+
+    if (!name || !dirPath) {
+      throw new Error("Name or dirPath is null when deleting a directory.");
+    }
+
+    const response = await fetch("/files/delete-directory", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, dirPath }),
+    });
+
+    if (response.ok) {
+      const idx = confirmationFile[3];
+
+      setFiles((prev) => prev.filter((_, i) => i !== idx));
+      openDeleteConfirmationMenu(null, null, null, null);
+    }
+  }
+
+  async function renameDirectory() {
+    const name = renamingFile[0];
+    const newName = document.getElementById(
+      "component-files-rename-inner-buttons-div-input"
+    ).value;
+    const dirPath = renamingFile[2];
+
+    if (!name || !newName || !dirPath) {
+      return;
+    }
+
+    const response = await fetch("/files/rename-directory", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, newName, dirPath }),
+    });
+
+    if (response.ok) {
+      const idx = renamingFile[3];
+
+      setFiles((prev) =>
+        prev.map((file, i) => (i === idx ? { ...file, name: newName } : file))
+      );
+      openRenamingMenu(null, null, null, null);
+    } else {
+      const data = await response.json();
+
+      alert(data.error);
+    }
   }
 
   return (
@@ -214,6 +279,7 @@ function FileContainer() {
             files.map((file, idx) => (
               <div
                 className="component-files-filescontainer-inner-div"
+                id={`component-files-filescontainer-inner-div-${idx}`}
                 key={idx}>
                 {file.isDirectory === true ? <DirectoryIcon /> : <FileIcon />}
                 <p
@@ -236,10 +302,27 @@ function FileContainer() {
                   <div className="component-files-filescontainer-inner-div-menu-div">
                     <button
                       onClick={() =>
-                        openDeleteConfirmationMenu(file.name, file.isDirectory)
+                        openDeleteConfirmationMenu(
+                          file.name,
+                          file.isDirectory,
+                          file.dirPath,
+                          idx
+                        )
                       }
                       className="component-files-filescontainer-inner-div-menu-div-button">
                       Delete
+                    </button>
+                    <button
+                      onClick={() =>
+                        openRenamingMenu(
+                          file.name,
+                          file.isDirectory,
+                          file.dirPath,
+                          idx
+                        )
+                      }
+                      className="component-files-filescontainer-inner-div-menu-div-button">
+                      Rename
                     </button>
                   </div>
                 </div>
@@ -265,12 +348,49 @@ function FileContainer() {
             </p>
             <div className="component-files-delete-confirmation-inner-buttons-div">
               <button
-                onClick={() => openDeleteConfirmationMenu(null, null)}
+                onClick={() =>
+                  openDeleteConfirmationMenu(null, null, null, null)
+                }
                 className="component-files-filescontainer-inner-div-menu-div-button">
                 No
               </button>
-              <button className="component-files-filescontainer-inner-div-menu-div-button">
+              <button
+                onClick={deleteDirectory}
+                className="component-files-filescontainer-inner-div-menu-div-button">
                 Yes
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id={`component-files-rename`} className="component-files-rename">
+          <div className="component-files-rename-inner">
+            <p
+              style={{
+                userSelect: "none",
+                color: "#ffffff",
+                fontSize: "20px",
+                maxWidth: "400px",
+              }}>
+              Renaming the {renamingFile[1] ? "directory" : "file"} '
+              {renamingFile[0]}' in the directory {renamingFile[2]}
+            </p>
+            <div className="component-files-rename-inner-buttons-div">
+              <input
+                className="component-files-rename-inner-buttons-div-input"
+                id="component-files-rename-inner-buttons-div-input"
+                placeholder={renamingFile[0]}
+              />
+            </div>
+            <div className="component-files-rename-inner-buttons-div">
+              <button
+                onClick={() => openRenamingMenu(null, null, null, null)}
+                className="component-files-filescontainer-inner-div-menu-div-button">
+                Back
+              </button>
+              <button
+                onClick={renameDirectory}
+                className="component-files-filescontainer-inner-div-menu-div-button">
+                Confirm
               </button>
             </div>
           </div>

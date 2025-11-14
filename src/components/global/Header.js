@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import opennas_logo from "../../styles/imgs/OpenNASS.png";
+import opennas_logo from "../../styles/imgs/OpenNAS.png";
 import MenuIcon from "../svgs/MenuIcon";
 
 function HeaderComponent() {
