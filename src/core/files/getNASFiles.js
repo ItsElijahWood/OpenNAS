@@ -99,7 +99,13 @@ function getNASFilesRecursive(
   }
 
   const files = [];
-  const pathToDir = path.join(recPath, Name);
+  let pathToDir;
+  if (Name) {
+    pathToDir = path.join(recPath, Name);
+  } else {
+    pathToDir = recPath;
+  }
+
   try {
     const readDir = fs
       .readdirSync(pathToDir)

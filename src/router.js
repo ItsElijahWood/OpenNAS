@@ -6,6 +6,13 @@ import { getSystemInformation } from "./core/dashboard/getSystemInformation.js";
 import { getNASFiles } from "./core/files/getNASFiles.js";
 import { deleteDirectory } from "./core/files/deleteDirectory.js";
 import { renameDirectory } from "./core/files/renameDirectory.js";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { newDirectory } from "./core/files/newDirectory.js";
+import { moveDirectory } from "./core/files/moveDirectory.js";
+import { getNASFilesSearch } from "./core/files/getNASFilesSearch.js";
+import { downloadFile } from "./core/files/downloadFile.js";
 
 /**
  *
@@ -33,9 +40,6 @@ export function router(app) {
   });
 
   // Files
-  app.get("/files/get-nas-drive-env", (req, res) => {
-    getNASDriveEnv(req, res);
-  });
   app.post("/files/get-nas-files", (req, res) => {
     getNASFiles(req, res);
   });
@@ -44,5 +48,98 @@ export function router(app) {
   });
   app.post("/files/rename-directory", (req, res) => {
     renameDirectory(req, res);
+  });
+  app.post("/files/move-directory", (req, res) => {
+    moveDirectory(req, res);
+  });
+  app.get("/files/new-directory", (req, res) => {
+    newDirectory(req, res);
+  });
+  app.get("/files/search", (req, res) => {
+    getNASFilesSearch(req, res);
+  });
+  app.post("/files/download", (req, res) => {
+    downloadFile(req, res);
+  });
+  app.post("/files/upload/file", (req, res) => {
+    const dirPath = req.query.path;
+    const isDirectory = false;
+
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        if (!dirPath) {
+          return cb(new Error("dirPath is null."));
+        }
+
+        if (fs.existsSync(path.join(dirPath, file.originalname))) {
+          return res.status(400).json({
+            error: `File with the name of '${file.originalname}' already exists.`,
+          });
+        }
+
+        cb(null, dirPath);
+      },
+      filename: function (req, file, cb) {
+        cb(null, path.basename(file.originalname));
+      },
+    });
+    const upload = multer({ storage }).array("files", 50);
+
+    upload(req, res, (e) => {
+      if (e) {
+        return res.status(400).json({ error: e.message });
+      }
+
+      const uploadedFiles = req.files.map((file) => ({
+        name: file.originalname,
+        dirPath,
+        isDirectory,
+      }));
+
+      return res
+        .status(200)
+        .json({ ok: "Files uploaded.", files: uploadedFiles });
+    });
+  });
+
+  app.post("/files/upload/directory", (req, res) => {
+    const dirPath = req.query.path;
+    const isDirectory = true;
+
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        if (!dirPath) {
+          return cb(new Error("dirPath is null."));
+        }
+
+        const dirname = path.dirname(file.originalname);
+        const fullDir = path.join(dirPath, dirname);
+
+        fs.mkdirSync(fullDir, { recursive: true });
+
+        cb(null, fullDir);
+      },
+      filename: function (req, file, cb) {
+        cb(null, path.basename(file.originalname));
+      },
+    });
+    const upload = multer({ storage, preservePath: true }).array("files", 1000);
+
+    upload(req, res, (e) => {
+      if (e) {
+        return res.status(400).json({ error: e.message });
+      }
+
+      const uploadedFiles = req.files.map((file) => ({
+        name: path.dirname(file.originalname),
+        dirPath: dirPath,
+        isDirectory,
+      }));
+
+      return res.status(200).json({
+        ok: "Files uploaded.",
+        files: uploadedFiles,
+      });
+    });
   });
 }
