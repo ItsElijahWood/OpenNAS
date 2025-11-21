@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DirectoryIcon from "../../svgs/DirectoryIcon";
 import FileIcon from "../../svgs/FileIcon";
 import MenuIconHorizontal from "../../svgs/MenuIconHorizontal";
+import ButtonComponent from "../../global/Button";
 
 function formatBytes(bytes, decimals = 1) {
   if (bytes === 0) return "0 Bytes";
@@ -27,6 +28,9 @@ function FileContainer() {
   const [outBound, setOutBound] = useState("");
   const [confirmationFile, setConfirmationFile] = useState([]);
   const [renamingFile, setRenamingFile] = useState([]);
+  const [moveDirectory, setMoveDirectory] = useState([]);
+  const inputRefUpload = useRef(null);
+  const inputRefUploadDirectory = useRef(null);
 
   useEffect(() => {
     let intervalId;
@@ -105,6 +109,7 @@ function FileContainer() {
       const data = await response.json();
 
       setFiles(data.files);
+      setBackPath(data.dirPath);
       if (data.mnt_point === data.dirPath) {
         setDisplayBackPath(false);
       } else {
@@ -192,6 +197,15 @@ function FileContainer() {
     const confirmMenu = document.getElementById(
       "component-files-delete-confirmation"
     );
+    const buttonsDiv = document.getElementById(
+      "component-files-filescontainer-buttons"
+    );
+
+    if (buttonsDiv.style.display === "none") {
+      buttonsDiv.style.display = "flex";
+    } else {
+      buttonsDiv.style.display = "none";
+    }
 
     setConfirmationFile([name, isDirectory, dirPath, idx]);
     confirmMenu.classList.toggle("visible");
@@ -199,9 +213,66 @@ function FileContainer() {
 
   function openRenamingMenu(name, isDirectory, dirPath, idx) {
     const renameMenu = document.getElementById("component-files-rename");
+    const buttonsDiv = document.getElementById(
+      "component-files-filescontainer-buttons"
+    );
+
+    if (buttonsDiv.style.display === "none") {
+      buttonsDiv.style.display = "flex";
+      const input = document.getElementById(
+        "component-files-rename-inner-buttons-div-input"
+      );
+
+      input.value = "";
+    } else {
+      buttonsDiv.style.display = "none";
+    }
 
     setRenamingFile([name, isDirectory, dirPath, idx]);
     renameMenu.classList.toggle("visible");
+  }
+
+  function openMoveMenu(name, isDirectory, dirPath, idx) {
+    const moveMenu = document.getElementById("component-move-directory");
+    const buttonsDiv = document.getElementById(
+      "component-files-filescontainer-buttons"
+    );
+
+    if (!buttonsDiv) return;
+
+    if (buttonsDiv.style.display === "none") {
+      buttonsDiv.style.display = "flex";
+      const input = document.getElementById(
+        "component-move-directory-inner-buttons-div-input"
+      );
+
+      input.value = "";
+    } else {
+      buttonsDiv.style.display = "none";
+    }
+
+    setMoveDirectory([name, isDirectory, dirPath, idx]);
+    moveMenu.classList.toggle("visible");
+  }
+
+  function openNewDirectoryMenu() {
+    const newDirMenu = document.getElementById("component-new-directory");
+    const buttonsDiv = document.getElementById(
+      "component-files-filescontainer-buttons"
+    );
+
+    if (buttonsDiv.style.display === "none") {
+      buttonsDiv.style.display = "flex";
+      const input = document.getElementById(
+        "component-new-directory-inner-buttons-div-input"
+      );
+
+      input.value = "";
+    } else {
+      buttonsDiv.style.display = "none";
+    }
+
+    newDirMenu.classList.toggle("visible");
   }
 
   async function deleteDirectory() {
@@ -258,12 +329,242 @@ function FileContainer() {
       const data = await response.json();
 
       alert(data.error);
+      openRenamingMenu(null, null, null, null);
+    }
+  }
+
+  async function moveDirectoryFunc() {
+    const name = moveDirectory[0];
+    const isDirectory = moveDirectory[1];
+    const newDir = document.getElementById(
+      "component-move-directory-inner-buttons-div-input"
+    ).value;
+    const dirPath = backPath;
+
+    if (!name || !newDir || !dirPath) {
+      return;
+    }
+
+    const response = await fetch("/files/move-directory", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, newDir, dirPath, isDirectory }),
+    });
+
+    if (response.ok) {
+      setFiles((prev) =>
+        prev.filter(
+          (file) => !(file.name === name && file.isDirectory === isDirectory)
+        )
+      );
+
+      openMoveMenu(null, null, null, null);
+    } else {
+      const data = await response.json();
+
+      alert(data.error);
+      openMoveMenu(null, null, null, null);
+    }
+  }
+
+  async function newDirectory() {
+    const input = document.getElementById(
+      "component-new-directory-inner-buttons-div-input"
+    ).value;
+    const dirPath = backPath;
+
+    console.log(input, dirPath);
+    if (!input || !dirPath) return;
+
+    const response = await fetch(
+      `/files/new-directory?n=${encodeURIComponent(
+        input
+      )}&p=${encodeURIComponent(dirPath)}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+
+      openNewDirectoryMenu();
+      setFiles((prev) => prev.concat(data.files));
+    } else {
+      const data = await response.json();
+
+      alert(data.error);
+    }
+  }
+
+  function clickInputUpload() {
+    inputRefUpload.current.click();
+  }
+  function clickInputUploadDirectory() {
+    inputRefUploadDirectory.current.click();
+  }
+
+  async function uploadFiles(e) {
+    const files = e.target.files;
+    if (!files || !backPath) {
+      return;
+    }
+
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("files", file);
+    }
+
+    const response = await fetch(
+      `/files/upload/file?path=${encodeURIComponent(backPath)}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+
+      setFiles((prev) => prev.concat(data.files));
+    } else {
+      const data = await response.json();
+
+      alert(data.error);
+    }
+  }
+
+  async function uploadDirectorys(e) {
+    const files = e.target.files;
+    if (!files || !backPath) {
+      return;
+    }
+
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("files", file, file.webkitRelativePath);
+    }
+
+    if (!backPath) {
+      return new Error("Backpath is null.");
+    }
+
+    const response = await fetch(
+      `/files/upload/directory?path=${encodeURIComponent(backPath)}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (response.ok) {
+      window.location.reload();
+    } else {
+      const data = await response.json();
+
+      alert(data.error);
+    }
+  }
+
+  async function NASFilesSearch(e) {
+    const data = e.target.value;
+    if (!data) {
+      return getRecFiles(backPath, false, null, true);
+    }
+
+    const response = await fetch(
+      `/files/search?n=${encodeURIComponent(data)}&r=${encodeURIComponent(
+        backPath
+      )}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+
+      setFiles(data.files);
+    } else {
+      setFiles([]);
+    }
+  }
+
+  async function downloadFile(dirPath, name) {
+    const response = await fetch("/files/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dirPath, name }),
+    });
+
+    if (response.ok) {
+      const data = await response.blob();
+      const object = URL.createObjectURL(data);
+
+      const createElement = document.createElement("a");
+      createElement.href = object;
+      createElement.download = name;
+
+      document.body.appendChild(createElement);
+      createElement.click();
+      createElement.remove();
+      URL.revokeObjectURL(object);
     }
   }
 
   return (
     <>
       <div className="component-files-filescontainer">
+        <div
+          id="component-files-filescontainer-buttons"
+          className="component-files-filescontainer-buttons">
+          <input
+            style={{ display: "none" }}
+            type="file"
+            ref={inputRefUpload}
+            onChange={(e) => uploadFiles(e)}
+            multiple
+          />
+          <ButtonComponent
+            buttonName="Upload File"
+            width={180}
+            border="2px solid rgb(226, 114, 91)"
+            borderRadius={5}
+            onClick={clickInputUpload}
+          />
+          <input
+            style={{ display: "none" }}
+            type="file"
+            ref={inputRefUploadDirectory}
+            onChange={(e) => uploadDirectorys(e)}
+            webkitdirectory="true"
+            multiple
+          />
+          <ButtonComponent
+            buttonName="Upload Directory"
+            border="2px solid rgb(226, 114, 91)"
+            onClick={clickInputUploadDirectory}
+            width={180}
+            borderRadius={5}
+          />
+          <ButtonComponent
+            buttonName="New Directory"
+            border="2px solid rgb(226, 114, 91)"
+            onClick={openNewDirectoryMenu}
+            width={180}
+            borderRadius={5}
+          />
+          <input
+            className="component-files-filescontainer-buttons-search"
+            id="component-files-filescontainer-buttons-search"
+            placeholder="Search files in current directory"
+            onChange={(e) => NASFilesSearch(e)}
+          />
+        </div>
         <div className="component-files-filescontainer-inner">
           {displayBackPath && (
             <div className="component-files-filescontainer-inner-div">
@@ -301,6 +602,11 @@ function FileContainer() {
                   className="component-files-filescontainer-inner-div-menu">
                   <div className="component-files-filescontainer-inner-div-menu-div">
                     <button
+                      className="component-files-filescontainer-inner-div-menu-div-button"
+                      onClick={() => downloadFile(file.dirPath, file.name)}>
+                      Download
+                    </button>
+                    <button
                       onClick={() =>
                         openDeleteConfirmationMenu(
                           file.name,
@@ -323,6 +629,18 @@ function FileContainer() {
                       }
                       className="component-files-filescontainer-inner-div-menu-div-button">
                       Rename
+                    </button>
+                    <button
+                      className="component-files-filescontainer-inner-div-menu-div-button"
+                      onClick={() =>
+                        openMoveMenu(
+                          file.name,
+                          file.isDirectory,
+                          file.dirPath,
+                          idx
+                        )
+                      }>
+                      Move
                     </button>
                   </div>
                 </div>
@@ -347,18 +665,18 @@ function FileContainer() {
               <b>permanently</b>?
             </p>
             <div className="component-files-delete-confirmation-inner-buttons-div">
-              <button
+              <ButtonComponent
                 onClick={() =>
                   openDeleteConfirmationMenu(null, null, null, null)
                 }
-                className="component-files-filescontainer-inner-div-menu-div-button">
-                No
-              </button>
-              <button
+                width="100%"
+                buttonName="No"
+              />
+              <ButtonComponent
                 onClick={deleteDirectory}
-                className="component-files-filescontainer-inner-div-menu-div-button">
-                Yes
-              </button>
+                width="100%"
+                buttonName="Yes"
+              />
             </div>
           </div>
         </div>
@@ -382,16 +700,93 @@ function FileContainer() {
               />
             </div>
             <div className="component-files-rename-inner-buttons-div">
-              <button
+              <ButtonComponent
                 onClick={() => openRenamingMenu(null, null, null, null)}
-                className="component-files-filescontainer-inner-div-menu-div-button">
-                Back
-              </button>
-              <button
+                width="100%"
+                buttonName="Back"
+              />
+              <ButtonComponent
                 onClick={renameDirectory}
-                className="component-files-filescontainer-inner-div-menu-div-button">
-                Confirm
-              </button>
+                width="100%"
+                buttonName="Confirm"
+              />
+            </div>
+          </div>
+        </div>
+        <div id={`component-new-directory`} className="component-new-directory">
+          <div className="component-new-directory-inner">
+            <p
+              style={{
+                userSelect: "none",
+                color: "#ffffff",
+                fontSize: "20px",
+                maxWidth: "400px",
+              }}>
+              New directory
+            </p>
+            <div className="component-new-directory-inner-buttons-div">
+              <input
+                className="component-new-directory-inner-buttons-div-input"
+                id="component-new-directory-inner-buttons-div-input"
+                placeholder="Name"
+              />
+            </div>
+            <div className="component-new-directory-inner-buttons-div">
+              <ButtonComponent
+                onClick={openNewDirectoryMenu}
+                width="100%"
+                buttonName="Back"
+              />
+              <ButtonComponent
+                onClick={newDirectory}
+                width="100%"
+                buttonName="Confirm"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          id={`component-move-directory`}
+          className="component-move-directory">
+          <div className="component-move-directory-inner">
+            <p
+              style={{
+                userSelect: "none",
+                color: "#ffffff",
+                fontSize: "20px",
+                maxWidth: "400px",
+              }}>
+              Moving the {moveDirectory[1] ? "directory" : "file"} '
+              {moveDirectory[0]}'.
+            </p>
+            <div className="component-move-directory-inner-buttons-div">
+              {moveDirectory[2] && (
+                <input
+                  className="component-move-directory-inner-buttons-div-input"
+                  id="component-move-directory-inner-buttons-div-input"
+                  value={moveDirectory[2]}
+                  onChange={(e) =>
+                    setMoveDirectory((prev) => {
+                      const copy = [...prev];
+                      copy[2] = e.target.value;
+
+                      return copy;
+                    })
+                  }
+                />
+              )}
+            </div>
+            <div className="component-move-directory-inner-buttons-div">
+              <ButtonComponent
+                onClick={() => openMoveMenu(null, null, null)}
+                width="100%"
+                buttonName="Back"
+              />
+              <ButtonComponent
+                onClick={moveDirectoryFunc}
+                width="100%"
+                buttonName="Confirm"
+              />
             </div>
           </div>
         </div>

@@ -1,12 +1,22 @@
+.app-container {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 45%;
+  left: 50%;
+  gap: 4rem;
+}
+.app-container-quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* Login form */
 .component-app-form {
   display: flex;
-  position: absolute;
   flex-direction: column;
   gap: 1.5rem;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
   background: rgba(78, 62, 60, 0.98);
   padding: 3rem;
   border: 3px solid #7a5c5c;
@@ -58,14 +68,28 @@
 }
 /* End of login form */
 
+@media (max-width: 1775px) {
+  .app-container {
+    gap: 0;
+  }
+  .app-container-quote-p {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
+  .app-container {
+    width: 100%;
+    height: 80vh;
+    gap: 0.8rem;
+  }
+
   /* Login form */
   .component-app-form {
     display: flex;
     justify-content: center;
     width: 85%;
     padding: 2rem 1rem;
-    height: auto;
     border-radius: 0 !important;
     height: 80vh;
   }

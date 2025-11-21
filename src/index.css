@@ -28,7 +28,7 @@ body {
   position: fixed;
   top: 0;
   z-index: 1;
-  width: 100%;
+  width: 100vw;
   height: 70px;
   background-color: rgba(78, 62, 60, 0.98);
   justify-content: space-between;
@@ -114,5 +114,7 @@ body {
   .global-component-header-menu.visible {
     width: 100vw !important;
     height: 100vh !important;
+    left: 0 !important;
+    right: auto !important;
   }
 }

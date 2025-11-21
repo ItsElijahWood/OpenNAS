@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import opennas_logo from "../../styles/imgs/OpenNAS.png";
 import MenuIcon from "../svgs/MenuIcon";
+import ButtonComponent from "./Button";
 
 function HeaderComponent() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -55,14 +56,10 @@ function HeaderComponent() {
         <div
           className="global-component-header-menu-div"
           onClick={() => (window.location.href = "/nas/files")}>
-          <button className="global-component-header-menu-div-button">
-            Files
-          </button>
+          <ButtonComponent buttonName="Files" width="100%" fontSize={18} />
         </div>
         <div className="global-component-header-menu-div">
-          <button className="global-component-header-menu-div-button">
-            Accounts
-          </button>
+          <ButtonComponent buttonName="Accounts" width="100%" fontSize={18} />
         </div>
       </div>
     </div>

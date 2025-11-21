@@ -3,7 +3,7 @@
   width: 100%;
   height: 70vh;
   justify-content: center;
-  margin-top: 10rem;
+  margin-top: 13rem;
 }
 
 /* Files container component */
@@ -14,6 +14,34 @@
   width: 70pc;
   display: flex;
   gap: 2rem;
+}
+.component-files-filescontainer-buttons {
+  position: absolute;
+  display: flex;
+  gap: 1rem;
+  top: -80px;
+  height: 7%;
+  width: 100%;
+}
+.component-files-filescontainer-buttons-search {
+  padding: 10px 10px;
+  border: 2px solid rgb(255, 141, 118);
+  background-color: #392926fa;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  width: 47.5%;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s ease-in-out;
+}
+.component-files-filescontainer-buttons-search::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.component-files-filescontainer-buttons-search:focus {
+  box-shadow: 0 0 6px rgba(226, 114, 91, 0.5);
+  background-color: #44312dfa;
 }
 .component-files-filescontainer-inner {
   border: 2px solid rgb(226, 114, 91);
@@ -86,7 +114,7 @@
   right: 20px;
   bottom: -170px;
   height: 150px;
-  width: 175px;
+  width: 200px;
   background-color: rgba(78, 62, 60, 0.98);
   border: 2px solid rgb(226, 114, 91);
   border-radius: 10px;
@@ -101,6 +129,15 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  overflow-y: auto;
+}
+.component-files-filescontainer-inner-div-menu-div::-webkit-scrollbar {
+  background-color: transparent;
+}
+.component-files-filescontainer-inner-div-menu-div::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: 10px;
+  cursor: grab;
 }
 .component-files-filescontainer-inner-div-menu-div-button {
   background: #392926fa;
@@ -173,7 +210,7 @@
 }
 .component-files-rename-inner-buttons-div-input {
   padding: 12px 16px;
-  border: 1px solid rgb(226, 114, 91);
+  border: 2px solid rgb(255, 255, 255);
   background-color: #392926fa;
   color: #ffffff;
   border-radius: 8px;
@@ -192,10 +229,114 @@
   box-shadow: 0 0 6px rgba(226, 114, 91, 0.5);
   background-color: #44312dfa;
 }
+.component-new-directory {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border: 2px solid rgb(226, 114, 91);
+  background-color: rgba(78, 62, 60, 0.98);
+  width: 100%;
+  height: 100%;
+}
+.component-new-directory.visible {
+  display: flex;
+}
+.component-new-directory-inner {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+  width: 375px;
+  text-align: center;
+}
+.component-new-directory-inner-buttons-div {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 10px;
+}
+.component-new-directory-inner-buttons-div-input {
+  padding: 12px 16px;
+  border: 2px solid rgb(255, 255, 255);
+  background-color: #392926fa;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s ease-in-out;
+}
+.component-new-directory-inner-buttons-div-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.component-new-directory-inner-buttons-div-input:focus {
+  border-color: rgb(255, 141, 118);
+  box-shadow: 0 0 6px rgba(226, 114, 91, 0.5);
+  background-color: #44312dfa;
+}
+.component-move-directory {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border: 2px solid rgb(226, 114, 91);
+  background-color: rgba(78, 62, 60, 0.98);
+  width: 100%;
+  height: 100%;
+}
+.component-move-directory.visible {
+  display: flex;
+}
+.component-move-directory-inner {
+  display: flex;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  flex-direction: column;
+  width: 375px;
+  text-align: center;
+}
+.component-move-directory-inner-buttons-div {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 10px;
+}
+.component-move-directory-inner-buttons-div-input {
+  padding: 12px 16px;
+  border: 2px solid rgb(255, 255, 255);
+  background-color: #392926fa;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s ease-in-out;
+}
+.component-move-directory-inner-buttons-div-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.component-move-directory-inner-buttons-div-input:focus {
+  border-color: rgb(255, 141, 118);
+  box-shadow: 0 0 6px rgba(226, 114, 91, 0.5);
+  background-color: #44312dfa;
+}
 
 @media (max-width: 480px) {
   .files-centre {
-    margin-top: 6rem !important;
+    margin-top: 10rem !important;
     height: 85vh;
   }
   .component-files-filescontainer {
@@ -203,24 +344,59 @@
     margin-left: 1.3rem !important;
     height: 85vh;
   }
+  .component-files-filescontainer-buttons {
+    flex-wrap: wrap !important;
+    top: -65px !important;
+  }
+  .component-files-filescontainer-buttons-search {
+    width: 44.5%;
+  }
   .component-files-filescontainer-info {
-    margin-top: 27rem !important;
+    margin-top: 33rem !important;
   }
   .component-files-filescontainer-info-div {
     width: 320px !important;
   }
   .component-files-filescontainer-inner {
-    height: 400px !important;
+    height: 420px !important;
     position: fixed !important;
+    width: 87.5% !important;
+    margin-top: 5rem !important;
   }
   .component-files-filescontainer-info {
     overflow: auto;
-    height: 400px !important;
+    height: 470px !important;
+  }
+  .component-files-rename-inner {
+    width: 80%;
   }
   .component-files-delete-confirmation {
     left: 47%;
+    top: 40% !important;
+    height: 100vh !important;
+  }
+  .component-files-delete-confirmation-inner {
+    width: 80% !important;
   }
   .component-files-rename {
     left: 47%;
+    top: 40%;
+    height: 100vh;
+  }
+  .component-move-directory {
+    left: 47%;
+    top: 40%;
+    height: 100vh;
+  }
+  .component-move-directory-inner {
+    width: 80%;
+  }
+  .component-new-directory {
+    left: 47%;
+    top: 40%;
+    height: 100vh;
+  }
+  .component-new-directory-inner {
+    width: 80%;
   }
 }

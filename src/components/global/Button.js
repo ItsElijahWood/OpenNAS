@@ -1,9 +1,21 @@
-function ButtonComponent({ buttonName, onClick, width }) {
+function ButtonComponent({
+  buttonName,
+  onClick,
+  width,
+  fontSize,
+  borderRadius,
+  border,
+}) {
   return (
     <button
       className="global-component-button"
       onClick={onClick}
-      style={{ width: width }}>
+      style={{
+        width: width,
+        fontSize: fontSize,
+        borderRadius: borderRadius,
+        border: border,
+      }}>
       {buttonName || "undefined"}
     </button>
   );
