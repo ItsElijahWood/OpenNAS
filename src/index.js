@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { router } from "./router.js";
 import cookieParser from "cookie-parser";
-import { NASDatabase } from "./database.js";
+import { database } from "./database.js";
 
 dotenv.config();
 
@@ -19,10 +19,7 @@ app.use(
   })
 );
 
-const db = new NASDatabase();
-db.init();
-await db.close();
-
+database();
 router(app);
 
 app.listen(PORT, () => {

@@ -2,6 +2,7 @@ import express from "express";
 import si from "systeminformation";
 import dotenv from "dotenv";
 import os from "os";
+import { NASDatabase } from "../../database.js";
 
 dotenv.config({ quiet: true });
 
@@ -13,7 +14,15 @@ dotenv.config({ quiet: true });
  */
 export async function getNASResources(req, res) {
   let infomation = {};
-  const NAS_DRIVE = process.env.NAS_DRIVE;
+  const uid = req.query.u;
+
+  if (!uid && uid !== 0) return res.status(400).json({ error: "UID is null." });
+
+  const conn = new NASDatabase();
+  await conn.init();
+
+  const data = await conn.get("SELECT drive FROM users WHERE id = ?", [uid]);
+  const NAS_DRIVE = data.drive;
 
   if (!NAS_DRIVE) {
     return res.status(300).json({ error: "NAS_DRIVE .env is null." });
@@ -45,7 +54,7 @@ export async function getNASResources(req, res) {
       size: specific_drive.size || "",
       used: specific_drive.used || "",
       available: specific_drive.available || "",
-      drive: NAS_DRIVE,
+      drive: NAS_DRIVE
     },
     cpu: {
       usage: cpu_percentage,

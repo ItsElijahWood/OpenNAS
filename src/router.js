@@ -13,12 +13,19 @@ import { newDirectory } from "./core/files/newDirectory.js";
 import { moveDirectory } from "./core/files/moveDirectory.js";
 import { getNASFilesSearch } from "./core/files/getNASFilesSearch.js";
 import { downloadFile } from "./core/files/downloadFile.js";
+import { getAccountInfo } from "./core/accounts/getAccountInfo.js";
+import { getNASDrives } from "./core/accounts/getNASDrives.js";
+import { getHighestUID } from "./core/getHighestUID.js";
 
 /**
  *
  * @param {express.Application} app
  */
 export function router(app) {
+  // Global functions
+  app.get("/global/get-highest-id", (req, res) => {
+    getHighestUID(req, res);
+  });
   // Auth
   app.post("/auth/login", (req, res) => {
     login(req, res);
@@ -28,6 +35,7 @@ export function router(app) {
       ok: `Welcome ${req.user.display_name}.`,
       display_name: req.user.display_name,
       username: req.user.username,
+      uid: req.user.uid,
     });
   });
 
@@ -37,6 +45,14 @@ export function router(app) {
   });
   app.get("/dashboard/get-system-information", (req, res) => {
     getSystemInformation(req, res);
+  });
+
+  // Accounts
+  app.post("/accounts/info", (req, res) => {
+    getAccountInfo(req, res);
+  });
+  app.get("/accounts/get-drives", (req, res) => {
+    getNASDrives(req, res);
   });
 
   // Files
@@ -66,7 +82,7 @@ export function router(app) {
     const isDirectory = false;
 
     const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
+      destination: function(req, file, cb) {
         if (!dirPath) {
           return cb(new Error("dirPath is null."));
         }
@@ -79,7 +95,7 @@ export function router(app) {
 
         cb(null, dirPath);
       },
-      filename: function (req, file, cb) {
+      filename: function(req, file, cb) {
         cb(null, path.basename(file.originalname));
       },
     });
@@ -107,7 +123,7 @@ export function router(app) {
     const isDirectory = true;
 
     const storage = multer.diskStorage({
-      destination: function (req, file, cb) {
+      destination: function(req, file, cb) {
         if (!dirPath) {
           return cb(new Error("dirPath is null."));
         }
@@ -119,7 +135,7 @@ export function router(app) {
 
         cb(null, fullDir);
       },
-      filename: function (req, file, cb) {
+      filename: function(req, file, cb) {
         cb(null, path.basename(file.originalname));
       },
     });

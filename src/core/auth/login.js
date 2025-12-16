@@ -1,6 +1,8 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { NASDatabase } from "../../database.js";
+import bcrypt from "bcrypt";
 
 dotenv.config({ quiet: true });
 
@@ -12,23 +14,27 @@ dotenv.config({ quiet: true });
 export async function login(req, res) {
   const { username, password } = req.body;
 
-  const user_username = getEnv(res, "NAS_USERNAME");
-  const user_password = getEnv(res, "NAS_PASSWORD");
-  const display_name = getEnv(res, "NAS_DISPLAY_NAME");
+  const conn = new NASDatabase();
+  await conn.init();
 
-  const JWT_TOKEN = getEnv(res, "JWT_TOKEN");
+  const data = await conn.get("SELECT * FROM users WHERE username = ?", [username]);
+  if (!data) return res.status(400).json({ error: "Username not found." });
 
-  if (username.toLowerCase() !== user_username.toLowerCase()) {
-    return res.status(300).json({ error: "Username not found." });
+  const JWT_TOKEN = getEnv("JWT_TOKEN");
+
+  if (username.toLowerCase() !== data.username) {
+    return res.status(400).json({ error: "Username not found." });
   }
-  if (password !== user_password) {
-    return res.status(300).json({ error: "Password is incorrect." });
+
+  const passCorrect = await bcrypt.compare(password, data.password);
+  if (!passCorrect) {
+    return res.status(400).json({ error: "Password is incorrect." });
   }
 
   const token = jwt.sign(
     {
-      username: user_username,
-      display_name: display_name,
+      username: username,
+      uid: data.id
     },
     JWT_TOKEN,
     { expiresIn: "10d" }
@@ -43,12 +49,8 @@ export async function login(req, res) {
   return res.json({ ok: "Logged in successfully." });
 }
 
-function getEnv(res, name) {
+function getEnv(name) {
   const value = process.env[name];
-
-  if (value) {
-    return value;
-  } else {
-    return res.status(500).json({ error: "ENV is null or empty value." });
-  }
+  if (!value) throw new Error("Missing env.");
+  return value;
 }

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { NASDatabase } from "../../database.js";
 
 dotenv.config({ quiet: true });
 
@@ -11,15 +12,18 @@ dotenv.config({ quiet: true });
  * @param {express.Request} req
  * @param {express.Response} res
  */
-export function getNASFiles(req, res) {
-  const { recPath, back, Name } = req.body;
+export async function getNASFiles(req, res) {
+  const { recPath, back, Name, uid } = req.body;
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
 
-  const NAS_MNT_POINT = process.env.NAS_MNT_POINT;
+  const conn = new NASDatabase();
+  await conn.init();
+
+  const NAS_MNT_POINT = await conn.get("SELECT mnt_point FROM users WHERE id = ?", [uid]);
   if (!NAS_MNT_POINT) {
-    return res.status(500).json({ error: "NAS_DRIVE env is null." });
+    return res.status(500).json({ error: "NAS_MNT_POINT env is null." });
   }
 
   if (recPath) {
@@ -28,13 +32,13 @@ export function getNASFiles(req, res) {
       recPath,
       back,
       Name,
-      NAS_MNT_POINT,
+      NAS_MNT_POINT.mnt_point,
       __filename,
       __dirname
     );
   }
 
-  const pathToDir = path.resolve(__dirname, `${NAS_MNT_POINT}`);
+  const pathToDir = path.resolve(__dirname, `${NAS_MNT_POINT.mnt_point}`);
   const readDir = fs
     .readdirSync(pathToDir)
     .filter((file) => !file.startsWith("."));
@@ -53,7 +57,7 @@ export function getNASFiles(req, res) {
 
   return res
     .status(200)
-    .json({ files, dirPath: pathToDir, mnt_point: NAS_MNT_POINT });
+    .json({ files, dirPath: pathToDir, mnt_point: NAS_MNT_POINT.mnt_point });
 }
 
 function getNASFilesRecursive(
