@@ -70,6 +70,7 @@ export async function getNASResources(req, res) {
   };
 
   infomation = info;
+  await conn.close();
   return res.status(200).json(infomation);
 }
 

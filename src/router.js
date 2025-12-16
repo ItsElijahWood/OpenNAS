@@ -16,6 +16,7 @@ import { downloadFile } from "./core/files/downloadFile.js";
 import { getAccountInfo } from "./core/accounts/getAccountInfo.js";
 import { getNASDrives } from "./core/accounts/getNASDrives.js";
 import { getHighestUID } from "./core/getHighestUID.js";
+import { createAccount } from "./core/accounts/createAccount.js";
 
 /**
  *
@@ -53,6 +54,9 @@ export function router(app) {
   });
   app.get("/accounts/get-drives", (req, res) => {
     getNASDrives(req, res);
+  });
+  app.post("/accounts/create-account", (req, res) => {
+    createAccount(req, res);
   });
 
   // Files

@@ -62,6 +62,24 @@ export class NASDatabase {
   }
 
   /**
+    * Run and get multiple querys from the database.
+    *
+    * @param {any} statement
+    * @param {Array} params
+    */
+  async all(statement, params) {
+    if (!this.conn) {
+      throw new Error("Database connection not initialised.");
+    }
+
+    if (params) {
+      return await this.conn.all(statement, params);
+    } else {
+      return await this.conn.all(statement);
+    }
+  }
+
+  /**
    * Closes the database.
    */
   async close() {

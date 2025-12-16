@@ -14,6 +14,7 @@ export async function getAccountInfo(req, res) {
   const conn = new NASDatabase();
   await conn.init();
 
-  const data = await conn.get("SELECT * FROM users");
+  const data = await conn.all("SELECT * FROM users");
+  await conn.close();
   return res.status(200).json({ ok: "Accounts info fetched successfully.", data });
 }
