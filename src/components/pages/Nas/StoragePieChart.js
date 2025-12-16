@@ -40,16 +40,37 @@ function formatBytes(bytes, decimals = 1) {
 }
 
 function StoragePieChart() {
+  const [uid, setUid] = useState(null);
   const [disk, setDisk] = useState([]);
   const [diskTotal, setDiskTotal] = useState("");
   const [nasDisk, setNasDisk] = useState("");
   const PIE_CHART_COLORS = ["#e2725b", "#00C49F"];
 
   useEffect(() => {
+    async function authUser() {
+      const response = await fetch("/auth/me", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        window.location.href = "/";
+      } else {
+        const data = await response.json();
+
+        setUid(data.uid);
+      }
+    }
+
+    authUser();
+  }, []);
+
+  useEffect(() => {
+    if (!uid && uid !== 0) return;
     let intervalId;
 
     async function getNASResources() {
-      const response = await fetch("/dashboard/get-resources", {
+      const response = await fetch(`/dashboard/get-resources?u=${encodeURIComponent(uid)}`, {
         method: "GET",
       });
 
@@ -78,7 +99,7 @@ function StoragePieChart() {
 
     intervalId = setInterval(getNASResources, 10000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [uid]);
 
   return (
     <div className="component-nas-storage-pie-chart">

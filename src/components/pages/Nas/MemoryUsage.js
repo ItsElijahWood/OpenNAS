@@ -12,6 +12,7 @@ function formatBytes(bytes, decimals = 1) {
 }
 
 function MemoryUsage() {
+  const [uid, setUid] = useState(null);
   const [ramTotal, setRamTotal] = useState(0);
   const [ramUsed, setRamUsed] = useState(0);
   const [ramFree, setRamFree] = useState(0);
@@ -22,10 +23,30 @@ function MemoryUsage() {
   ];
 
   useEffect(() => {
+    async function authUser() {
+      const response = await fetch("/auth/me", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        window.location.href = "/";
+      } else {
+        const data = await response.json();
+
+        setUid(data.uid);
+      }
+    }
+
+    authUser();
+  }, []);
+
+  useEffect(() => {
+    if (!uid && uid !== 0) return;
     let intervalId;
 
     async function getNASResources() {
-      const response = await fetch("/dashboard/get-resources", {
+      const response = await fetch(`/dashboard/get-resources?u=${encodeURIComponent(uid)}`, {
         method: "GET",
       });
 
@@ -41,7 +62,7 @@ function MemoryUsage() {
 
     intervalId = setInterval(getNASResources, 10000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [uid]);
 
   return (
     <div className="component-nas-memory-pie-chart-outer">

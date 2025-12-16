@@ -15,6 +15,7 @@ function formatBytes(bytes, decimals = 1) {
 }
 
 function FileContainer() {
+  const [uid, setUid] = useState(null);
   const [files, setFiles] = useState([]);
   const [displayBackPath, setDisplayBackPath] = useState(true);
   const [backPath, setBackPath] = useState("");
@@ -33,9 +34,30 @@ function FileContainer() {
   const inputRefUploadDirectory = useRef(null);
 
   useEffect(() => {
+    async function authUser() {
+      const response = await fetch("/auth/me", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        window.location.href = "/";
+      } else {
+        const data = await response.json();
+
+        setUid(data.uid);
+      }
+    }
+
+    authUser();
+  }, []);
+
+  useEffect(() => {
+    if (!uid && uid !== 0) return;
     let intervalId;
+
     async function getNASResources() {
-      const response = await fetch("/dashboard/get-resources", {
+      const response = await fetch(`/dashboard/get-resources?u=${encodeURIComponent(uid)}`, {
         method: "GET",
       });
 
@@ -59,7 +81,7 @@ function FileContainer() {
 
     intervalId = setInterval(getNASResources, 10000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [uid]);
 
   useEffect(() => {
     let intervalId;
@@ -94,8 +116,9 @@ function FileContainer() {
   }, []);
 
   useEffect(() => {
+    if (!uid && uid !== 0) return;
     getFiles();
-  }, []);
+  }, [uid]);
 
   async function getFiles() {
     const response = await fetch("/files/get-nas-files", {
@@ -103,6 +126,7 @@ function FileContainer() {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ uid })
     });
 
     if (response.ok) {
@@ -110,6 +134,7 @@ function FileContainer() {
 
       setFiles(data.files);
       setBackPath(data.dirPath);
+
       if (data.mnt_point === data.dirPath) {
         setDisplayBackPath(false);
       } else {
@@ -129,7 +154,7 @@ function FileContainer() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recPath, back, Name }),
+        body: JSON.stringify({ recPath, back, Name, uid }),
       });
 
       if (response.ok) {
@@ -149,7 +174,7 @@ function FileContainer() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recPath, back }),
+        body: JSON.stringify({ recPath, back, uid }),
       });
 
       if (response.ok) {
@@ -350,7 +375,7 @@ function FileContainer() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, newDir, dirPath, isDirectory }),
+      body: JSON.stringify({ name, newDir, dirPath, isDirectory, uid }),
     });
 
     if (response.ok) {

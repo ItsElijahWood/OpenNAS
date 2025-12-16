@@ -6,9 +6,8 @@ This project is currently in early development. More information will be release
 
 ### Note
 
-**Supported:** Arch Linux<br>
-**Upcoming Support:** Debian Linux<br>
-**Possible Unsupported** Windows
+**Supported:** Arch Linux, Debian Linux<br>
+**p.s:** This is for hosting OpenNAS not using it.<br>
 
 ### Screen responsiveness
 

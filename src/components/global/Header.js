@@ -58,7 +58,9 @@ function HeaderComponent() {
           onClick={() => (window.location.href = "/nas/files")}>
           <ButtonComponent buttonName="Files" width="100%" fontSize={18} />
         </div>
-        <div className="global-component-header-menu-div">
+        <div
+          className="global-component-header-menu-div"
+          onClick={() => (window.location.href = "/nas/accounts")}>
           <ButtonComponent buttonName="Accounts" width="100%" fontSize={18} />
         </div>
       </div>

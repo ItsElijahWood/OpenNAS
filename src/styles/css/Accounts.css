@@ -1,0 +1,103 @@
+/* Account Component */
+.component-account-container {
+  display: flex;
+  width: 95pc;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(78, 62, 60, 0.98);
+  font-family: sans-serif;
+  border-radius: 10px;
+  padding: 15px;
+  flex-direction: column;
+}
+td, tr {
+  user-select: none;
+}
+.component-account-container-0 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.component-account-container-title {
+  font-family: sans-serif;
+  user-select: none;
+  color: #ffffff;
+  font-size: 24px;
+}
+.component-account-container-p {
+  font-family: sans-serif;
+  user-select: none;
+  color: #ffffff;
+}
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: sans-serif;
+}
+.account-table th, 
+.account-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  color: #fff;
+}
+.account-table th {
+  background-color: rgb(226, 114, 91);
+}
+.tooltip-accounts {
+  position: relative;
+  cursor: help;
+}
+.tooltip-accounts:hover::after {
+  content: attr(data-info);
+  position: absolute;
+  top: -35px;
+  left: 0;
+  background: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 1;
+}
+.tooltip-accounts::after {
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+#component-account-create-account {
+  display: none;
+}
+.component-account-new-account-fs,
+.component-account-new-account-mnt,
+.component-account-new-account-access {
+  padding: 12px 16px;
+  border: 2px solid rgb(255, 255, 255);
+  background-color: #392926fa;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  width: 200px;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s ease-in-out;
+}
+.component-account-new-account-input {
+  padding: 12px 16px;
+  border: 2px solid rgb(255, 255, 255);
+  background-color: #392926fa;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s ease-in-out;
+}
+
