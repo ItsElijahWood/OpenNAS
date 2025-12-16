@@ -43,7 +43,7 @@ function AccountComponent() {
       if (response.ok) {
         const data = await response.json();
 
-        setAccounts([data.data]);
+        setAccounts(data.data);
       }
     }
 
@@ -85,91 +85,129 @@ function AccountComponent() {
     renderDiv.style.display = "none";
   };
 
-  return (
-    <>
-      <div className="component-account-container">
-        <div className="component-account-container-0">
-          <p className="component-account-container-title">Accounts</p>
-          <Button buttonName="New Account" onClick={createNewAccount} width={200} />
-        </div>
-        <div style={{ marginTop: "50px" }}>
-          <table className="account-table">
-            <thead>
-              <tr>
-                <th className="tooltip-accounts" data-info="Modify the account">Modify</th>
-                <th className="tooltip-accounts" data-info="The accounts username">Username</th>
-                <th className="tooltip-accounts" data-info="Unique user ID assigned to the account">UID</th>
-                <th className="tooltip-accounts" data-info="Whether this is a built-in system account">Builtin</th>
-                <th className="tooltip-accounts" data-info="What access or privileges this user has (User, Admin)">Access</th>
-                <th className="tooltip-accounts" data-info="The password of the account">Password</th>
-                <th className="tooltip-accounts" data-info="Short description of the account">Description</th>
-                <th className="tooltip-accounts" data-info="Where this user is mounted (filesystem path)">Mnt Point</th>
-                <th className="tooltip-accounts" data-info="Disk associated with the user">Disk</th>
-              </tr>
-            </thead>
-            <tbody>
-              {accounts.map((account, index) => (
-                <tr key={index}>
-                  <td style={{ display: "flex", justifyContent: "center" }}>
-                    <PencilIcon width="30px" color="rgb(226, 114, 91)" height="30px" />
-                  </td>
-                  <td>{account.username}</td>
-                  <td>{account.id}</td>
-                  <td>{account.builtin}</td>
-                  <td>{account.access}</td>
-                  <td>{account.hidden_password}</td>
-                  <td>{account.reason}</td>
-                  <td>{account.mnt_point}</td>
-                  <td>{account.drive}</td>
-                </tr>
-              ))}
-              <tr id="component-account-create-account">
-                <td style={{ display: "flex", borderTop: "none", padding: "16px", width: "auto" }}>
-                  <CheckMark width="30px" color="rgb(226, 114, 91)" height="30px" />
-                  <XIcon width="30px" color="rgb(226, 114, 91)" height="30px" onClick={closeNewAccount} />
-                </td>
-                <td>
-                  <input placeholder="Username" className="component-account-new-account-input" id="component-account-username-new-account" type="text" />
-                </td>
-                <td>
-                  <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-uid-new-account" type="text" value={newAccount.uid} readOnly />
-                </td>
-                <td>
-                  <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-builtin-new-account" type="text" value="No" readOnly />
-                </td>
-                <td>
-                  <select id="component-account-new-account-access" className="component-account-new-account-access">
-                    <option value="User">User</option>
-                    <option value="Admin">Admin</option>
-                  </select>
-                </td>
-                <td>
-                  <input placeholder="Password" className="component-account-new-account-input" id="component-account-password-new-account" type="text" />
-                </td>
-                <td>
-                  <input placeholder="Description" className="component-account-new-account-input" id="component-account-reason-new-account" type="text" />
-                </td>
-                <td>
-                  <select id="component-account-new-account-mnt" className="component-account-new-account-mnt">
-                    {newAccount.mnt.map((acc, idx) => (
-                      <option key={idx} value={acc.mnt}>{acc.mnt}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select id="component-account-new-account-fs" className="component-account-new-account-fs">
-                    {newAccount.fs.map((acc, idx) => (
-                      <option key={idx} value={acc.fs}>{acc.fs}</option>
-                    ))}
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  async function createAccount() {
+    const username = document.getElementById("component-account-username-new-account").value;
+    const uid = document.getElementById("component-account-uid-new-account").value;
+    const builtin = document.getElementById("component-account-builtin-new-account").value;
+    const access = document.getElementById("component-account-new-account-access").value;
+    const password = document.getElementById("component-account-password-new-account").value;
+    const reason = document.getElementById("component-account-reason-new-account").value;
+    const mnt_point = document.getElementById("component-account-new-account-mnt").value;
+    const disk = document.getElementById("component-account-new-account-fs").value;
+
+    const createAccount = await fetch("/accounts/create-account", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, uid, builtin, access, password, reason, mnt_point, disk })
+    });
+
+    if (createAccount.ok) {
+      const hidden_password = "*".repeat(password.length);
+
+      setAccounts(prev => [
+        ...prev,
+        {
+          username,
+          id: uid,
+          builtin,
+          access,
+          hidden_password,
+          reason,
+          mnt_point,
+          drive: disk
+        }
+      ]);
+    closeNewAccount();
+  }
+};
+
+return (
+  <>
+    <div className="component-account-container">
+      <div className="component-account-container-0">
+        <p className="component-account-container-title">Accounts</p>
+        <Button buttonName="New Account" onClick={createNewAccount} width={200} />
       </div>
-    </>
-  )
+      <div style={{ marginTop: "50px" }}>
+        <table className="account-table">
+          <thead>
+            <tr>
+              <th className="tooltip-accounts" data-info="Modify the account">Modify</th>
+              <th className="tooltip-accounts" data-info="The accounts username">Username</th>
+              <th className="tooltip-accounts" data-info="Unique user ID assigned to the account">UID</th>
+              <th className="tooltip-accounts" data-info="Whether this is a built-in system account">Builtin</th>
+              <th className="tooltip-accounts" data-info="What access or privileges this user has (User, Admin)">Access</th>
+              <th className="tooltip-accounts" data-info="The password of the account">Password</th>
+              <th className="tooltip-accounts" data-info="Short description of the account">Description</th>
+              <th className="tooltip-accounts" data-info="Where this user is mounted (filesystem path)">Mnt Point</th>
+              <th className="tooltip-accounts" data-info="Disk associated with the user">Disk</th>
+            </tr>
+          </thead>
+          <tbody>
+            {accounts.map((account, index) => (
+              <tr key={index}>
+                <td style={{ display: "flex", justifyContent: "center" }}>
+                  <PencilIcon width="30px" color="rgb(226, 114, 91)" height="30px" />
+                </td>
+                <td>{account.username}</td>
+                <td>{account.id}</td>
+                <td>{account.builtin}</td>
+                <td>{account.access}</td>
+                <td>{account.hidden_password}</td>
+                <td>{account.reason}</td>
+                <td>{account.mnt_point}</td>
+                <td>{account.drive}</td>
+              </tr>
+            ))}
+            <tr id="component-account-create-account">
+              <td style={{ display: "flex", borderTop: "none", padding: "16px", width: "auto" }}>
+                <CheckMark width="30px" color="rgb(226, 114, 91)" height="30px" onClick={createAccount} />
+                <XIcon width="30px" color="rgb(226, 114, 91)" height="30px" onClick={closeNewAccount} />
+              </td>
+              <td>
+                <input placeholder="Username" className="component-account-new-account-input" id="component-account-username-new-account" type="text" />
+              </td>
+              <td>
+                <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-uid-new-account" type="text" value={newAccount.uid} readOnly />
+              </td>
+              <td>
+                <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-builtin-new-account" type="text" value="No" readOnly />
+              </td>
+              <td>
+                <select id="component-account-new-account-access" className="component-account-new-account-access">
+                  <option value="User">User</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </td>
+              <td>
+                <input placeholder="Password" className="component-account-new-account-input" id="component-account-password-new-account" type="password" />
+              </td>
+              <td>
+                <input placeholder="Description" className="component-account-new-account-input" id="component-account-reason-new-account" type="text" />
+              </td>
+              <td>
+                <select id="component-account-new-account-mnt" className="component-account-new-account-mnt">
+                  {newAccount.mnt.map((acc, idx) => (
+                    <option key={idx} value={acc.mnt}>{acc.mnt}</option>
+                  ))}
+                </select>
+              </td>
+              <td>
+                <select id="component-account-new-account-fs" className="component-account-new-account-fs">
+                  {newAccount.fs.map((acc, idx) => (
+                    <option key={idx} value={acc.fs}>{acc.fs}</option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </>
+)
 }
 
 export default AccountComponent;
