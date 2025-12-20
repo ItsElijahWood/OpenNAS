@@ -2,15 +2,15 @@
 .component-account-container {
   display: flex;
   width: 95pc;
-  position: absolute;
   top: 20%;
-  left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(78, 62, 60, 0.98);
   font-family: sans-serif;
   border-radius: 10px;
   padding: 15px;
   flex-direction: column;
+  margin-left: 50%;
+  margin-top: 20vh;
 }
 td, tr {
   user-select: none;
@@ -99,5 +99,15 @@ td, tr {
   box-sizing: border-box;
   user-select: none;
   transition: all 0.25s ease-in-out;
+}
+.account-table td:first-child {
+  text-align: center;
+  vertical-align: middle;
+}
+.modify-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 

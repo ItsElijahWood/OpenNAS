@@ -400,7 +400,6 @@ function FileContainer() {
     ).value;
     const dirPath = backPath;
 
-    console.log(input, dirPath);
     if (!input || !dirPath) return;
 
     const response = await fetch(

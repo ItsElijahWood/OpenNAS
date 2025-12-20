@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import CheckMark from "../../svgs/checkMark";
 import XIcon from "../../svgs/XIcon";
 import PencilIcon from "../../svgs/PencilIcon";
+import BinIcon from "../../svgs/BinIcon";
 
 function AccountComponent() {
   const [uid, setUid] = useState(null);
@@ -95,6 +96,10 @@ function AccountComponent() {
     const mnt_point = document.getElementById("component-account-new-account-mnt").value;
     const disk = document.getElementById("component-account-new-account-fs").value;
 
+    if (!username || !uid || !builtin || !access || !password || !mnt_point || !disk) {
+      return alert("Values cannot be empty while creating an account.");
+    }
+
     const createAccount = await fetch("/accounts/create-account", {
       method: "POST",
       headers: {
@@ -105,6 +110,7 @@ function AccountComponent() {
 
     if (createAccount.ok) {
       const hidden_password = "*".repeat(password.length);
+      const MNT_POINT = `${mnt_point}/${username}`;
 
       setAccounts(prev => [
         ...prev,
@@ -115,99 +121,113 @@ function AccountComponent() {
           access,
           hidden_password,
           reason,
-          mnt_point,
+          MNT_POINT,
           drive: disk
         }
       ]);
-    closeNewAccount();
-  }
-};
+      closeNewAccount();
+    }
+  };
 
-return (
-  <>
-    <div className="component-account-container">
-      <div className="component-account-container-0">
-        <p className="component-account-container-title">Accounts</p>
-        <Button buttonName="New Account" onClick={createNewAccount} width={200} />
-      </div>
-      <div style={{ marginTop: "50px" }}>
-        <table className="account-table">
-          <thead>
-            <tr>
-              <th className="tooltip-accounts" data-info="Modify the account">Modify</th>
-              <th className="tooltip-accounts" data-info="The accounts username">Username</th>
-              <th className="tooltip-accounts" data-info="Unique user ID assigned to the account">UID</th>
-              <th className="tooltip-accounts" data-info="Whether this is a built-in system account">Builtin</th>
-              <th className="tooltip-accounts" data-info="What access or privileges this user has (User, Admin)">Access</th>
-              <th className="tooltip-accounts" data-info="The password of the account">Password</th>
-              <th className="tooltip-accounts" data-info="Short description of the account">Description</th>
-              <th className="tooltip-accounts" data-info="Where this user is mounted (filesystem path)">Mnt Point</th>
-              <th className="tooltip-accounts" data-info="Disk associated with the user">Disk</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((account, index) => (
-              <tr key={index}>
-                <td style={{ display: "flex", justifyContent: "center" }}>
-                  <PencilIcon width="30px" color="rgb(226, 114, 91)" height="30px" />
-                </td>
-                <td>{account.username}</td>
-                <td>{account.id}</td>
-                <td>{account.builtin}</td>
-                <td>{account.access}</td>
-                <td>{account.hidden_password}</td>
-                <td>{account.reason}</td>
-                <td>{account.mnt_point}</td>
-                <td>{account.drive}</td>
+  return (
+    <>
+      <div className="component-account-container">
+        <div className="component-account-container-0">
+          <p className="component-account-container-title">Accounts</p>
+          <Button buttonName="New Account" onClick={createNewAccount} width={200} />
+        </div>
+        <div style={{ marginTop: "50px" }}>
+          <table className="account-table">
+            <thead>
+              <tr>
+                <th className="tooltip-accounts" data-info="Modify the account">Modify</th>
+                <th className="tooltip-accounts" data-info="The accounts username">Username</th>
+                <th className="tooltip-accounts" data-info="Unique user ID assigned to the account">UID</th>
+                <th className="tooltip-accounts" data-info="Whether this is a built-in system account">Builtin</th>
+                <th className="tooltip-accounts" data-info="What access or privileges this user has (User, Admin)">Access</th>
+                <th className="tooltip-accounts" data-info="The password of the account">Password</th>
+                <th className="tooltip-accounts" data-info="Short description of the account">Description</th>
+                <th className="tooltip-accounts" data-info="Where this user is mounted (filesystem path)">Mnt Point</th>
+                <th className="tooltip-accounts" data-info="Disk associated with the user">Disk</th>
               </tr>
-            ))}
-            <tr id="component-account-create-account">
-              <td style={{ display: "flex", borderTop: "none", padding: "16px", width: "auto" }}>
-                <CheckMark width="30px" color="rgb(226, 114, 91)" height="30px" onClick={createAccount} />
-                <XIcon width="30px" color="rgb(226, 114, 91)" height="30px" onClick={closeNewAccount} />
-              </td>
-              <td>
-                <input placeholder="Username" className="component-account-new-account-input" id="component-account-username-new-account" type="text" />
-              </td>
-              <td>
-                <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-uid-new-account" type="text" value={newAccount.uid} readOnly />
-              </td>
-              <td>
-                <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-builtin-new-account" type="text" value="No" readOnly />
-              </td>
-              <td>
-                <select id="component-account-new-account-access" className="component-account-new-account-access">
-                  <option value="User">User</option>
-                  <option value="Admin">Admin</option>
-                </select>
-              </td>
-              <td>
-                <input placeholder="Password" className="component-account-new-account-input" id="component-account-password-new-account" type="password" />
-              </td>
-              <td>
-                <input placeholder="Description" className="component-account-new-account-input" id="component-account-reason-new-account" type="text" />
-              </td>
-              <td>
-                <select id="component-account-new-account-mnt" className="component-account-new-account-mnt">
-                  {newAccount.mnt.map((acc, idx) => (
-                    <option key={idx} value={acc.mnt}>{acc.mnt}</option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <select id="component-account-new-account-fs" className="component-account-new-account-fs">
-                  {newAccount.fs.map((acc, idx) => (
-                    <option key={idx} value={acc.fs}>{acc.fs}</option>
-                  ))}
-                </select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {accounts.map((account, index) => (
+                <tr key={index}>
+                  <td className="modify-cell">
+                    <div className="modify-actions">
+                      {account.id !== 0 ? (
+                        <>
+                          <PencilIcon width="30px" cursor="pointer" title="Modify the account" color="rgb(226, 114, 91)" height="30px" />
+                          <BinIcon width="30px" cursor="pointer" title="Delete the account and all the files belonging to the user" color="rgb(226, 114, 91)" height="30px" />
+                        </>
+                      ) : (
+                        <>
+                          <PencilIcon width="30px" color="grey" cursor="not-allowed" title="You either don't have access to modify accounts, or your trying to modify root account which can only be changed in the env file" height="30px" />
+                          <BinIcon width="30px" cursor="not-allowed" title="You either don't have access to delete the account and the files, or your trying to delete root account which can not be deleted" color="grey" height="30px" />
+                        </>
+                      )}
+                    </div>
+                  </td>
+                  <td>{account.username}</td>
+                  <td>{account.id}</td>
+                  <td>{account.builtin}</td>
+                  <td>{account.access}</td>
+                  <td>{account.hidden_password}</td>
+                  <td>{account.reason}</td>
+                  <td>{account.mnt_point}</td>
+                  <td>{account.drive}</td>
+                </tr>
+              ))}
+              <tr id="component-account-create-account">
+                <td className="modify-cell" >
+                  <div className="modify-actions">
+                    <CheckMark width="30px" color="rgb(226, 114, 91)" height="30px" onClick={createAccount} />
+                    <XIcon width="30px" color="rgb(226, 114, 91)" height="30px" onClick={closeNewAccount} />
+                  </div>
+                </td>
+                <td>
+                  <input placeholder="Username" className="component-account-new-account-input" id="component-account-username-new-account" type="text" />
+                </td>
+                <td>
+                  <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-uid-new-account" type="text" value={newAccount.uid} readOnly />
+                </td>
+                <td>
+                  <input className="component-account-new-account-input" style={{ cursor: "not-allowed" }} id="component-account-builtin-new-account" type="text" value="No" readOnly />
+                </td>
+                <td>
+                  <select id="component-account-new-account-access" className="component-account-new-account-access">
+                    <option value="User">User</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </td>
+                <td>
+                  <input placeholder="Password" className="component-account-new-account-input" id="component-account-password-new-account" type="password" />
+                </td>
+                <td>
+                  <input placeholder="Description" className="component-account-new-account-input" id="component-account-reason-new-account" type="text" />
+                </td>
+                <td>
+                  <select id="component-account-new-account-mnt" className="component-account-new-account-mnt">
+                    {newAccount.mnt.map((acc, idx) => (
+                      <option key={idx} value={acc.mnt}>{acc.mnt}</option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select id="component-account-new-account-fs" className="component-account-new-account-fs">
+                    {newAccount.fs.map((acc, idx) => (
+                      <option key={idx} value={acc.fs}>{acc.fs}</option>
+                    ))}
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </>
-)
+    </>
+  )
 }
 
 export default AccountComponent;

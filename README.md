@@ -11,5 +11,5 @@ This project is currently in early development. More information will be release
 
 ### Screen responsiveness
 
-**Supports:** Desktop, Laptop, Mobile <br>
+**Supports:** Desktop, Laptop<br>
 **Unsupported:** Tablet

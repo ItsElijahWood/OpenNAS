@@ -111,6 +111,7 @@
   backdrop-filter: blur(8px);
   height: 350px;
   width: 450px;
+  margin-left: 0.5rem;
 }
 .component-nas-system-info-title {
   display: flex;
@@ -243,7 +244,7 @@
   border-radius: 1rem;
   align-items: center;
   width: 700px;
-  margin-left: 29rem;
+  margin-left: 27.5rem;
 }
 .component-nas-network-line-chart-title {
   color: #ffffff;
@@ -298,14 +299,15 @@
   }
   .component-nas-memory-pie-chart-outer {
     width: 300px !important;
-    height: 550px !important;
+    height: 600px !important;
   }
   .component-nas-memory-pie-chart {
     gap: 0;
     flex-wrap: wrap;
   }
   .VictoryContainer {
-    width: 70% !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   .component-nas-network-line-chart {
     margin-left: 0 !important;
@@ -314,5 +316,12 @@
   .component-nas-network-line-chart-inner {
     width: 410px !important;
     justify-content: center;
+  }
+}
+
+
+@media (max-width: 480px) { 
+  .VictoryContainer {
+    height: 80% !important;
   }
 }
