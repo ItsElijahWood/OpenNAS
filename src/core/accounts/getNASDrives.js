@@ -13,7 +13,7 @@ export async function getNASDrives(req, res) {
   for (const driveL of drives) {
     const mount = driveL.mount;
     const drive = driveL.fs;
-    if (!mount.startsWith("/")) continue;
+    if (!mount.startsWith("/mnt/")) continue;
 
     driveArray.push({ fs: drive });
     mntArray.push({ mnt: mount });

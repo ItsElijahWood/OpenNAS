@@ -10,7 +10,6 @@ dotenv.config({ quiet: true });
  *
  * @param {express.Request} req
  * @param {express.Response} res
- * @returns
  */
 export async function getNASResources(req, res) {
   let infomation = {};
@@ -22,8 +21,13 @@ export async function getNASResources(req, res) {
   await conn.init();
 
   const data = await conn.get("SELECT drive FROM users WHERE id = ?", [uid]);
-  const NAS_DRIVE = data.drive;
 
+  if (!data) {
+    await conn.close();
+    return res.status(404).json({ error: `No user found with UID ${uid}` });
+  }
+
+  const NAS_DRIVE = data.drive;
   if (!NAS_DRIVE) {
     return res.status(300).json({ error: "NAS_DRIVE .env is null." });
   }
@@ -41,6 +45,8 @@ export async function getNASResources(req, res) {
     }
 
     const arr_drives = drive_names.join(", ");
+
+    await conn.close();
 
     return res.status(500).json({
       error: `The NAS_DRIVE "${NAS_DRIVE}" has not matched to a drive on your device. Avaliable drives: ${arr_drives}`,
@@ -70,6 +76,7 @@ export async function getNASResources(req, res) {
   };
 
   infomation = info;
+
   await conn.close();
   return res.status(200).json(infomation);
 }
